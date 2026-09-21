@@ -1,8 +1,15 @@
+import Banner from '@/Component/HomePage/banner';
+import Books from '@/Component/HomePage/Books';
+import React from 'react';
 
-
-export default function Home() {
+const page = () => {
   return (
-    <>
-    </>
+    <div>
+
+    <Banner></Banner>
+    <Books></Books>
+    </div>
   );
-}
+};
+
+export default page;
