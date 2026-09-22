@@ -1,20 +1,33 @@
-import React from 'react';
-import Image from 'next/image';
-import ReadBooks from '@/Component/BookDetails/ReadBooks';
-import Wishlist from '@/Component/BookDetails/Wishlist';
+import React from "react";
+import Image from "next/image";
+import ReadBooks from "@/Component/BookDetails/ReadBooks";
+import Wishlist from "@/Component/BookDetails/Wishlist";
 
 const getBooks = async () => {
-  const res = await fetch('http://localhost:3000/booksData.json', {
-    cache: 'no-store',
-  });
-  if (!res.ok) return [];
-  return res.json();
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_SERVER_BASE_URL || "http://localhost:3000";
+    console.log("Fetching from URL:", `${baseUrl}/booksData.json`);
+
+    const res = await fetch(`${baseUrl}/booksData.json`);
+
+    if (!res.ok) {
+      console.log("Fetch failed with status:", res.status);
+      return [];
+    }
+
+    const data = await res.json();
+    console.log("Data fetched successfully! Total items:", data.length);
+    return data;
+  } catch (error) {
+    console.error("FETCH ERROR DETAIL:", error);
+    return [];
+  }
 };
 
 const page = async ({ params }) => {
   const { id } = await params;
 
-  if (!id || id === 'undefined') {
+  if (!id || id === "undefined") {
     return (
       <div className="text-center py-20 text-red-500 font-bold text-xl">
         Invalid Book ID! Please select a valid book from home page.
@@ -23,7 +36,7 @@ const page = async ({ params }) => {
   }
 
   const bookData = await getBooks();
-  
+
   const books = bookData.find((book) => String(book.bookId) === String(id));
 
   if (!books) {
@@ -109,7 +122,9 @@ const page = async ({ params }) => {
             </div>
             <div className="grid grid-cols-2">
               <span className="text-base-content/70">Year of Publishing:</span>
-              <span className="font-bold text-base-content">{yearOfPublishing}</span>
+              <span className="font-bold text-base-content">
+                {yearOfPublishing}
+              </span>
             </div>
             <div className="grid grid-cols-2">
               <span className="text-base-content/70">Rating:</span>
