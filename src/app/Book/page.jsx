@@ -27,8 +27,8 @@ const Books = async () => {
         </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5">
-        {books.map((book) => (
-          <BookCard key={book.bookId} book={book}></BookCard>
+        {books.map((book,index) => (
+          <BookCard key={`${book.bookId}-${index}`} book={book}></BookCard>
         ))}
       </div>
     </div>

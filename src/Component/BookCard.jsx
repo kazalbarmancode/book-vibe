@@ -18,7 +18,6 @@ const BookCard = ({ book }) => {
   return (
     <div className="card bg-base-100 border border-base-200 rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
       
-      {/* Book Cover Image Container */}
       <div className="bg-base-200 rounded-xl py-8 flex items-center justify-center mb-6">
         <div className="relative w-36 h-52 shadow-md hover:scale-105 transition-transform duration-300">
           <Image
@@ -32,11 +31,9 @@ const BookCard = ({ book }) => {
         </div>
       </div>
 
-      {/* Book Info */}
       <div className="space-y-4 flex-1 flex flex-col justify-between">
         
         <div>
-          {/* Tags */}
           <div className="flex flex-wrap gap-2 mb-3">
             {tags?.map((tag, index) => (
               <span
@@ -48,7 +45,6 @@ const BookCard = ({ book }) => {
             ))}
           </div>
 
-          {/* Book Title & Author */}
           <h2 className="text-xl font-bold text-base-content line-clamp-1 mb-1">
             {bookName}
           </h2>
@@ -57,14 +53,11 @@ const BookCard = ({ book }) => {
           </p>
         </div>
 
-        {/* Divider */}
         <div className="border-t border-dashed border-base-300 my-2"></div>
 
-        {/* Card Footer Details */}
         <div className="flex items-center justify-between text-sm text-base-content/80 font-medium">
           <span>{category}</span>
 
-          {/* Rating */}
           <div className="flex items-center gap-1">
             <span>{rating}</span>
             <svg
@@ -78,9 +71,8 @@ const BookCard = ({ book }) => {
           </div>
         </div>
 
-        {/* View Details Action Button */}
         <Link 
-          href={`/Book/${book.Id}`}
+          href={`/Book/${bookId}`}
           className="btn btn-sm btn-outline btn-success w-full mt-2"
         >
           View Details

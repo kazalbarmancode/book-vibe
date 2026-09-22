@@ -1,18 +1,40 @@
-import Image from 'next/image';
 import React from 'react';
+import Image from 'next/image';
+import ReadBooks from '@/Component/BookDetails/ReadBooks';
+import Wishlist from '@/Component/BookDetails/Wishlist';
 
+const getBooks = async () => {
+  const res = await fetch('http://localhost:3000/booksData.json', {
+    cache: 'no-store',
+  });
+  if (!res.ok) return [];
+  return res.json();
+};
 
-  const getBooks = async()=>{
-        const res = await fetch('http://localhost:3000/booksData.json');
-        const data = await res.json();
-        return data;
-    }
-const page = async({params}) => {
-    const {id}=await params;
+const page = async ({ params }) => {
+  const { id } = await params;
 
-    const bookData=await getBooks();
-    const book=bookData.find(book=> String (book.bookId) === String(id))
-    const {
+  if (!id || id === 'undefined') {
+    return (
+      <div className="text-center py-20 text-red-500 font-bold text-xl">
+        Invalid Book ID! Please select a valid book from home page.
+      </div>
+    );
+  }
+
+  const bookData = await getBooks();
+  
+  const books = bookData.find((book) => String(book.bookId) === String(id));
+
+  if (!books) {
+    return (
+      <div className="text-center py-20 text-red-500 font-bold text-xl">
+        Book Not Found!
+      </div>
+    );
+  }
+
+  const {
     bookName,
     author,
     image,
@@ -23,12 +45,11 @@ const page = async({params}) => {
     tags,
     publisher,
     yearOfPublishing,
-  } = book;
-    return (
-        <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-10">
+  } = books;
+
+  return (
+    <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-10">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-        
-        {/* Left Side: Book Cover Image */}
         <div className="lg:col-span-5 bg-base-200 rounded-3xl p-8 sm:p-12 flex items-center justify-center">
           <div className="relative w-52 h-80 sm:w-64 sm:h-96 shadow-2xl rounded-lg overflow-hidden">
             <Image
@@ -42,9 +63,7 @@ const page = async({params}) => {
           </div>
         </div>
 
-        {/* Right Side: Book Details */}
         <div className="lg:col-span-7 space-y-5">
-          {/* Title & Author */}
           <div>
             <h1 className="text-3xl sm:text-4xl font-bold text-base-content mb-2">
               {bookName}
@@ -55,21 +74,14 @@ const page = async({params}) => {
           </div>
 
           <div className="border-t border-base-200 my-3"></div>
-
-          {/* Category */}
-          <p className="text-lg font-medium text-base-content/80">
-            {category}
-          </p>
-
+          <p className="text-lg font-medium text-base-content/80">{category}</p>
           <div className="border-t border-base-200 my-3"></div>
 
-          {/* Review */}
           <p className="text-base-content/80 leading-relaxed text-sm sm:text-base">
             <span className="font-bold text-base-content">Review : </span>
             {review}
           </p>
 
-          {/* Tags */}
           <div className="flex items-center gap-3 py-2">
             <span className="font-bold text-base-content">Tag</span>
             <div className="flex flex-wrap gap-2">
@@ -86,7 +98,6 @@ const page = async({params}) => {
 
           <div className="border-t border-base-200 my-3"></div>
 
-          {/* Specifications Table/Grid */}
           <div className="space-y-3 text-sm sm:text-base max-w-md">
             <div className="grid grid-cols-2">
               <span className="text-base-content/70">Number of Pages:</span>
@@ -106,21 +117,14 @@ const page = async({params}) => {
             </div>
           </div>
 
-          {/* Action Buttons */}
           <div className="flex items-center gap-4 pt-4">
-            <button className="btn btn-outline border-base-300 font-semibold px-8">
-              Read
-            </button>
-            <button className="btn btn-accent text-white font-semibold px-8">
-              Wishlist
-            </button>
+            <ReadBooks books={books}></ReadBooks>
+            <Wishlist books={books}></Wishlist>
           </div>
-
         </div>
-
       </div>
-       </section>
-    );
+    </section>
+  );
 };
 
 export default page;
